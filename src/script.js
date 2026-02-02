@@ -19,8 +19,11 @@ const mercuryTexture = textureLoader.load('/textures/2k_mercury.jpg')
 const venusTexture = textureLoader.load('/textures/2k_venus_surface.jpg')
 const earthTexture = textureLoader.load('/textures/2k_earth_daymap.jpg')
 const marsTexture = textureLoader.load('/textures/2k_mars.jpg')
+const jupiterTexture = textureLoader.load('/textures/2k_jupiter.jpg')
+const saturnTexture = textureLoader.load('/textures/2k_saturn.jpg')
+const uranusTexture = textureLoader.load('/textures/2k_uranus.jpg')
+const neptuneTexture = textureLoader.load('/textures/2k_neptune.jpg')
 const moonTexture = textureLoader.load('/textures/2k_moon.jpg')
-
 // const backgroundCubemap = textureLoader.load('/textures/neon-sumer-K8eWS_abimM-unsplash.jpg')
 const backgroundCubemap = cubeTextureLoader.load([
   'px.png',
@@ -53,6 +56,26 @@ const marsMaterial = new THREE.MeshStandardMaterial(
     map: marsTexture
   }
 )
+const jupiterMaterial = new THREE.MeshStandardMaterial(
+  {
+    map: jupiterTexture
+  }
+)
+const saturnMaterial = new THREE.MeshStandardMaterial(
+  {
+    map: saturnTexture
+  }
+)
+const uranusMaterial = new THREE.MeshStandardMaterial(
+  {
+    map: uranusTexture
+  }
+)
+const neptuneMaterial = new THREE.MeshStandardMaterial(
+  {
+    map: neptuneTexture
+  }
+)
 const moonMaterial = new THREE.MeshStandardMaterial(
   {
     map: moonTexture
@@ -65,7 +88,7 @@ const sunMaterial = new THREE.MeshBasicMaterial({
   map: sunTexture
 })
 const sun = new THREE.Mesh(sphereGeometry, sunMaterial)
-sun.scale.setScalar(7)
+sun.scale.setScalar(8)
 scene.add(sun)
 
 const planets = [
@@ -79,7 +102,7 @@ const planets = [
   },
   {
     name: "Venus",
-    radius: 0.8,
+    radius: 0.9,
     distance: 15,
     speed: 0.007,
     material: venusMaterial,
@@ -102,25 +125,165 @@ const planets = [
   },
   {
     name: 'Mars',
-    radius: 0.7,
+    radius: 0.4,
     distance: 25,
     speed: 0.003,
     material: marsMaterial,
     moons: [
       {
         name: 'Phobos',
-        radius: 0.1,
+        radius: 0.2,
         distance: 2,
         speed: 0.02,
       },
       {
         name: 'Deimos',
-        radius: 0.2,
+        radius: 0.1,
         distance: 3,
         speed: 0.015,
         color: 0xffffff,
       }
     ]
+  },
+  {
+    name: "Jupiter",
+    radius: 3.1,
+    distance: 32,
+    speed: 0.007,
+    material: jupiterMaterial,
+    moons: [
+      {
+        name: 'Io',
+        radius: 0.1,
+        distance: 3.5,
+        speed: 0.02,
+      },
+      {
+        name: 'Europa',
+        radius: 0.07,
+        distance: 4.5,
+        speed: 0.015,
+        color: 0xffffff,
+      },
+      {
+        name: 'Ganymede',
+        radius: 0.2,
+        distance: 1.5,
+        speed: 0.02,
+      },
+      {
+        name: 'Callisto',
+        radius: 0.18,
+        distance: 2.5,
+        speed: 0.015,
+        color: 0xffffff,
+      }
+    ],
+  },
+  {
+    name: "Saturn",
+    radius: 2.3,
+    distance: 50,
+    speed: 0.007,
+    material: saturnMaterial,
+    moons: [
+      {
+        name: 'Dione',
+        radius: 0.07,
+        distance: 1.5,
+        speed: 0.02,
+      },
+      {
+        name: 'Rhea',
+        radius: 0.18,
+        distance: 2.5,
+        speed: 0.015,
+        color: 0xffffff,
+      },
+      {
+        name: 'Titan',
+        radius: 0.2,
+        distance: 3.5,
+        speed: 0.02,
+      },
+      {
+        name: 'Iapetus',
+        radius: 0.1,
+        distance: 4.5,
+        speed: 0.015,
+        color: 0xffffff,
+      }
+    ],
+  },
+  {
+    name: "Uranus",
+    radius: 1.6,
+    distance: 63,
+    speed: 0.007,
+    material: uranusMaterial,
+    moons: [
+      {
+        name: 'Miranda',
+        radius: 0.07,
+        distance: 1.5,
+        speed: 0.02,
+      },
+      {
+        name: 'Ariel',
+        radius: 0.1,
+        distance: 2.5,
+        speed: 0.015,
+        color: 0xffffff,
+      },
+      {
+        name: 'Umbriel',
+        radius: 0.1,
+        distance: 3.5,
+        speed: 0.02,
+      },
+      {
+        name: 'Titania',
+        radius: 0.2,
+        distance: 4.5,
+        speed: 0.015,
+        color: 0xffffff,
+      },
+      {
+        name: 'Oberon',
+        radius: 0.18,
+        distance: 5.5,
+        speed: 0.015,
+        color: 0xffffff,
+      },
+    ],
+  },
+  {
+    name: "Neptune",
+    radius: 1.6,
+    distance: 75,
+    speed: 0.007,
+    material: neptuneMaterial,
+    moons: [
+      {
+        name: 'Triton',
+        radius: 0.2,
+        distance: 1.5,
+        speed: 0.02,
+      },
+      {
+        name: 'Proteus',
+        radius: 0.1,
+        distance: 2.5,
+        speed: 0.015,
+        color: 0xffffff,
+      },
+      {
+        name: 'Nereid',
+        radius: 0.07,
+        distance: 3.5,
+        speed: 0.02,
+      },
+    ],
   },
 ]
 
@@ -198,16 +361,16 @@ window.addEventListener("resize", () => {
 
 // render loop
 const renderloop = () => {
-  planetMeshes.forEach((planet, planetIndex) => {
-    planet.rotation.y += planets[planetIndex].speed
-    planet.position.x = Math.sin(planet.rotation.y) * planets[planetIndex].distance
-    planet.position.z = Math.cos(planet.rotation.y) * planets[planetIndex].distance
-    planet.children.forEach((moon, moonIndex) => {
-      moon.rotation.y += planets[planetIndex].moons[moonIndex].speed
-      moon.position.x = Math.sin(moon.rotation.y) * planets[planetIndex].moons[moonIndex].distance
-      moon.position.z = Math.cos(moon.rotation.y) * planets[planetIndex].moons[moonIndex].distance
-    })
-  })
+  // planetMeshes.forEach((planet, planetIndex) => {
+  //   planet.rotation.y += planets[planetIndex].speed
+  //   planet.position.x = Math.sin(planet.rotation.y) * planets[planetIndex].distance
+  //   planet.position.z = Math.cos(planet.rotation.y) * planets[planetIndex].distance
+  //   planet.children.forEach((moon, moonIndex) => {
+  //     moon.rotation.y += planets[planetIndex].moons[moonIndex].speed
+  //     moon.position.x = Math.sin(moon.rotation.y) * planets[planetIndex].moons[moonIndex].distance
+  //     moon.position.z = Math.cos(moon.rotation.y) * planets[planetIndex].moons[moonIndex].distance
+  //   })
+  // })
   controls.update();
   renderer.render(scene, camera);
   window.requestAnimationFrame(renderloop);
