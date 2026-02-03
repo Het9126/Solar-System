@@ -1,7 +1,8 @@
 import * as THREE from "three";
 import { plane } from "three/examples/jsm/Addons.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { color } from "three/tsl";
+import { color, distance } from "three/tsl";
+import { RingGeometry } from "three/webgpu";
 import { Pane } from "tweakpane";
 
 // initialize pane
@@ -21,6 +22,7 @@ const earthTexture = textureLoader.load('/textures/2k_earth_daymap.jpg')
 const marsTexture = textureLoader.load('/textures/2k_mars.jpg')
 const jupiterTexture = textureLoader.load('/textures/2k_jupiter.jpg')
 const saturnTexture = textureLoader.load('/textures/2k_saturn.jpg')
+const saturnringTexture = textureLoader.load('/textures/2k_saturn_ring_alpha.png')
 const uranusTexture = textureLoader.load('/textures/2k_uranus.jpg')
 const neptuneTexture = textureLoader.load('/textures/2k_neptune.jpg')
 const moonTexture = textureLoader.load('/textures/2k_moon.jpg')
@@ -66,6 +68,11 @@ const saturnMaterial = new THREE.MeshStandardMaterial(
     map: saturnTexture
   }
 )
+const saturnringMaterial = new THREE.MeshStandardMaterial(
+  {
+    map: saturnringTexture
+  }
+)
 const uranusMaterial = new THREE.MeshStandardMaterial(
   {
     map: uranusTexture
@@ -84,6 +91,8 @@ const moonMaterial = new THREE.MeshStandardMaterial(
 
 // add stuff here
 const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+const torusGeometry = new THREE.TorusGeometry(2.4, 0.8, 2, 100 );
+const ringGeometry = new THREE.RingGeometry( 2, 3, 32 );
 const sunMaterial = new THREE.MeshBasicMaterial({
   map: sunTexture
 })
@@ -99,14 +108,16 @@ const planets = [
     speed: 0.01,
     material: mercuryMaterial,
     moons: [],
+    ring: [],
   },
   {
     name: "Venus",
     radius: 0.9,
     distance: 15,
-    speed: 0.007,
+    speed: 0.008,
     material: venusMaterial,
     moons: [],
+    ring: [],
   },
   {
     name: 'Earth',
@@ -121,7 +132,8 @@ const planets = [
         distance: 3,
         speed: 0.015,
       }
-    ]
+    ],
+    ring: [],
   },
   {
     name: 'Mars',
@@ -143,13 +155,14 @@ const planets = [
         speed: 0.015,
         color: 0xffffff,
       }
-    ]
+    ],
+    ring: [],
   },
   {
     name: "Jupiter",
     radius: 3.1,
-    distance: 32,
-    speed: 0.007,
+    distance: 41,
+    speed: 0.002,
     material: jupiterMaterial,
     moons: [
       {
@@ -162,36 +175,37 @@ const planets = [
         name: 'Europa',
         radius: 0.07,
         distance: 4.5,
-        speed: 0.015,
+        speed: 0.017,
         color: 0xffffff,
       },
       {
         name: 'Ganymede',
         radius: 0.2,
         distance: 1.5,
-        speed: 0.02,
+        speed: 0.015,
       },
       {
         name: 'Callisto',
         radius: 0.18,
         distance: 2.5,
-        speed: 0.015,
+        speed: 0.013,
         color: 0xffffff,
       }
     ],
+    ring: [],
   },
   {
     name: "Saturn",
     radius: 2.3,
-    distance: 50,
-    speed: 0.007,
+    distance: 68,
+    speed: 0.0016,
     material: saturnMaterial,
     moons: [
       {
         name: 'Dione',
         radius: 0.07,
         distance: 1.5,
-        speed: 0.02,
+        speed: 0.018,
       },
       {
         name: 'Rhea',
@@ -204,22 +218,30 @@ const planets = [
         name: 'Titan',
         radius: 0.2,
         distance: 3.5,
-        speed: 0.02,
+        speed: 0.012,
       },
       {
         name: 'Iapetus',
         radius: 0.1,
         distance: 4.5,
-        speed: 0.015,
+        speed: 0.010,
         color: 0xffffff,
+      }
+    ],
+    ring: [
+      {
+        name: 'sring',
+        distance: 0,
+        rx: 1.5708,
+        ry: 0.523599
       }
     ],
   },
   {
     name: "Uranus",
     radius: 1.6,
-    distance: 63,
-    speed: 0.007,
+    distance: 91,
+    speed: 0.0011,
     material: uranusMaterial,
     moons: [
       {
@@ -232,58 +254,60 @@ const planets = [
         name: 'Ariel',
         radius: 0.1,
         distance: 2.5,
-        speed: 0.015,
+        speed: 0.017,
         color: 0xffffff,
       },
       {
         name: 'Umbriel',
         radius: 0.1,
         distance: 3.5,
-        speed: 0.02,
+        speed: 0.014,
       },
       {
         name: 'Titania',
         radius: 0.2,
         distance: 4.5,
-        speed: 0.015,
+        speed: 0.011,
         color: 0xffffff,
       },
       {
         name: 'Oberon',
         radius: 0.18,
         distance: 5.5,
-        speed: 0.015,
+        speed: 0.009,
         color: 0xffffff,
       },
     ],
+    ring: [],
   },
   {
     name: "Neptune",
     radius: 1.6,
-    distance: 75,
-    speed: 0.007,
+    distance: 107,
+    speed: 0.0009,
     material: neptuneMaterial,
     moons: [
       {
         name: 'Triton',
         radius: 0.2,
         distance: 1.5,
-        speed: 0.02,
+        speed: 0.011,
       },
       {
         name: 'Proteus',
         radius: 0.1,
         distance: 2.5,
-        speed: 0.015,
+        speed: 0.016,
         color: 0xffffff,
       },
       {
         name: 'Nereid',
         radius: 0.07,
         distance: 3.5,
-        speed: 0.02,
+        speed: 0.008,
       },
     ],
+    ring: [],
   },
 ]
 
@@ -307,6 +331,17 @@ const createMoon = (moon) => {
   return moonMesh
 }
 
+const createRing = (ring) => {
+  const ringMesh = new THREE.Mesh(
+    torusGeometry,
+    saturnringMaterial
+  )
+  ringMesh.position.x = ring.distance
+  ringMesh.rotation.x = ring.rx
+  ringMesh.rotation.y = ring.ry
+  return ringMesh
+}
+
 const planetMeshes = planets.map((planet) => {
   const planetMesh = createPlanet(planet)
   scene.add(planetMesh)
@@ -315,12 +350,18 @@ const planetMeshes = planets.map((planet) => {
     const moonMesh = createMoon(moon)
     planetMesh.add(moonMesh)
   })
+  // return planetMesh
+
+  planet.ring.forEach((ring) => {
+    const ringMesh = createRing(ring)
+    planetMesh.add(ringMesh)
+  })
   return planetMesh
 })
 
 const ambientLight = new THREE.AmbientLight(
   0xffffff,
-  0.05
+  0.06
 )
 scene.add(ambientLight)
 
@@ -335,7 +376,7 @@ const camera = new THREE.PerspectiveCamera(
   35,
   window.innerWidth / window.innerHeight,
   0.1,
-  400
+  500
 );
 camera.position.z = 100;
 camera.position.y = 5;
@@ -361,16 +402,16 @@ window.addEventListener("resize", () => {
 
 // render loop
 const renderloop = () => {
-  // planetMeshes.forEach((planet, planetIndex) => {
-  //   planet.rotation.y += planets[planetIndex].speed
-  //   planet.position.x = Math.sin(planet.rotation.y) * planets[planetIndex].distance
-  //   planet.position.z = Math.cos(planet.rotation.y) * planets[planetIndex].distance
-  //   planet.children.forEach((moon, moonIndex) => {
-  //     moon.rotation.y += planets[planetIndex].moons[moonIndex].speed
-  //     moon.position.x = Math.sin(moon.rotation.y) * planets[planetIndex].moons[moonIndex].distance
-  //     moon.position.z = Math.cos(moon.rotation.y) * planets[planetIndex].moons[moonIndex].distance
-  //   })
-  // })
+  planetMeshes.forEach((planet, planetIndex) => {
+    // planet.rotation.y += planets[planetIndex].speed
+    // planet.position.x = Math.sin(planet.rotation.y) * planets[planetIndex].distance
+    // planet.position.z = Math.cos(planet.rotation.y) * planets[planetIndex].distance
+    // planet.children.forEach((moon, moonIndex) => {
+    //   moon.rotation.y += planets[planetIndex].moons[moonIndex].speed
+    //   moon.position.x = Math.sin(moon.rotation.y) * planets[planetIndex].moons[moonIndex].distance
+    //   moon.position.z = Math.cos(moon.rotation.y) * planets[planetIndex].moons[moonIndex].distance
+    // })
+  })
   controls.update();
   renderer.render(scene, camera);
   window.requestAnimationFrame(renderloop);
