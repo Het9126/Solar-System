@@ -1,12 +1,33 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title>Solar System</title>
-        <link rel="stylesheet" href="./style.css">
-	</head>
-	<body>
-        <canvas class="threejs"></canvas>
-        <script type="module" src="./script.js"></script>
-	</body>
-</html> 
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive 3D Solar System — explore all 8 planets, their moons, and Saturn's rings in real time. Built with Three.js.">
+    <title>Solar System — Interactive 3D Explorer</title>
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+
+    <!-- Loading screen: shown until all textures are ready -->
+    <div id="loading-screen">
+      <div id="loading-content">
+        <div id="loading-title">Solar System</div>
+        <div id="loading-bar-track">
+          <div id="loading-bar"></div>
+        </div>
+        <div id="loading-text">Preparing…</div>
+      </div>
+    </div>
+
+    <!-- Speed / Pause controls (bottom-right corner) -->
+    <div id="controls-panel">
+      <button id="btn-pause" title="Pause / Resume">⏸</button>
+      <input type="range" id="speed-slider" min="0.1" max="10" step="0.1" value="1" title="Simulation speed">
+      <span id="speed-label">1.0×</span>
+    </div>
+
+    <canvas class="threejs"></canvas>
+    <script type="module" src="./script.js"></script>
+  </body>
+</html>

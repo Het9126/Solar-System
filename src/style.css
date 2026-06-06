@@ -1,5 +1,146 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
-    margin: 0;
-    overflow: hidden;
-  }
-  
+  overflow: hidden;
+  background: #000;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* ─── Loading Screen ─── */
+#loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, #0a0a1e 0%, #000005 100%);
+  transition: opacity 0.8s ease;
+}
+#loading-screen.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+#loading-content {
+  text-align: center;
+}
+#loading-title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow:
+    0 0 40px rgba(255, 180, 60, 0.55),
+    0 0 90px rgba(255, 100, 20, 0.25);
+  margin-bottom: 2.5rem;
+}
+#loading-bar-track {
+  width: 280px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 0 auto 1.2rem;
+}
+#loading-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ff6a00, #ffcc44);
+  border-radius: 2px;
+  transition: width 0.25s ease;
+  box-shadow: 0 0 10px rgba(255, 180, 60, 0.9);
+}
+#loading-text {
+  color: rgba(255, 255, 255, 0.30);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ─── Speed / Pause Controls ─── */
+#controls-panel {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: rgba(8, 8, 24, 0.70);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  color: #fff;
+  box-shadow: 0 4px 28px rgba(0, 0, 0, 0.6);
+}
+#btn-pause {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 2px 4px;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+#btn-pause:hover { color: #ffcc44; }
+
+#speed-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+#speed-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #ffcc44;
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(255, 200, 60, 0.8);
+}
+#speed-slider::-moz-range-thumb {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #ffcc44;
+  cursor: pointer;
+  border: none;
+}
+#speed-label {
+  font-size: 0.72rem;
+  min-width: 34px;
+  color: rgba(255, 255, 255, 0.50);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Planet Name Labels (CSS2DRenderer) ─── */
+.planet-label {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  background: rgba(0, 0, 12, 0.50);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 4px;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
